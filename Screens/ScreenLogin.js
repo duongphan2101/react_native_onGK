@@ -1,9 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image,TouchableOpacity } from 'react-native';
-import { TextInput } from 'react-native-web';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert,TextInput } from 'react-native';
 
 const ScreenLogin = ({navigation}) =>{
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleContinue = () => {
+        if (email.trim() === '' || password.trim() === '') {
+            Alert.alert("Lỗi", "Vui lòng nhập cả email và mật khẩu!");
+        } else {
+            navigation.navigate('ScreenElectronics'); 
+        }
+    };
     
+    const togglePasswordVisibility = () => {
+        setShowPassword(prevState => !prevState); // Chuyển đổi trạng thái hiển thị mật khẩu
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.style1}>
@@ -17,17 +31,23 @@ const ScreenLogin = ({navigation}) =>{
             </View>
             <View style={styles.style4}>
                 <Image source={require('../assets/Data/Vector.png')} style={styles.imgVector}/>
-                <TextInput style={styles.ipEmail} placeholder='Enter your email address'
-                keyboardType='email-address'
+                <TextInput style={styles.ipEmail} 
+                placeholder='Enter your email address'
+                keyboardType='email-address' 
+                value={email} 
+                onChangeText={setEmail}
                 />
             </View>
             <View style={styles.style5}>
                 <Image source={require('../assets/Data/lock.png')} style={styles.imglock} />
-                <TextInput style={styles.ipPassword} placeholder='Enter your password'
-                keyboardType='password'
+                <TextInput  style={styles.ipPassword}
+                    placeholder='Enter your password'
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry={!showPassword} 
                 />
-                <TouchableOpacity>
-                <Image source={require('../assets/Data/eye.png')} style={styles.imgeye} />
+                <TouchableOpacity onPress={togglePasswordVisibility}>
+                    <Image source={require('../assets/Data/eye.png')} style={styles.imgeye} />
                 </TouchableOpacity>
                
             </View>
@@ -35,7 +55,7 @@ const ScreenLogin = ({navigation}) =>{
                  <Text style={styles.texrForgot}>Forgot password?</Text>
             </View>
             <View style={styles.style7}>
-            <TouchableOpacity onPress={ScreenLogin} style={styles.continueButton}>
+            <TouchableOpacity onPress={handleContinue} style={styles.continueButton}>
                 <Text style={styles.textContinue}>Continue</Text>
             </TouchableOpacity>
             </View>
